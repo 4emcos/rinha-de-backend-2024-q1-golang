@@ -9,12 +9,12 @@ import (
 
 const (
 	getUserBalanceQuery      = "SELECT u.initial_balance, u.limit_in_cents FROM rinha.users u WHERE u.id = $1"
-	getUserTransactionsQuery = "SELECT h.value, h.type, h.description, h.do_at FROM rinha.history h WHERE h.user_id = $1 LIMIT 10"
+	getUserTransactionsQuery = "SELECT h.value, h.type, h.description, h.do_at FROM rinha.history h WHERE h.user_id = $1 ORDER BY id DESC LIMIT 10"
 )
 
 func GetStatement(id int32, db database.Pgx) (models.Statement, error) {
 	var balance models.Balance
-	var transactions []models.Transaction
+	transactions := make([]models.Transaction, 0)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -33,7 +33,7 @@ func GetStatement(id int32, db database.Pgx) (models.Statement, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var transaction models.Transaction
+		var transaction = models.Transaction{}
 		err = rows.Scan(&transaction.Value, &transaction.Type, &transaction.Description, &transaction.TransactionDate)
 		if err != nil {
 			return models.Statement{}, err

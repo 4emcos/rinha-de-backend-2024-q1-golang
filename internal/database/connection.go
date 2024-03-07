@@ -28,7 +28,7 @@ func Connect() Pgx {
 	}
 
 	err := error(nil)
-	conn, err = pgxpool.New(context.Background(), "user=admin password=oot123 dbname=rinha host=db port=5432")
+	conn, err = pgxpool.New(context.Background(), "user=admin password=oot123 dbname=rinha host=localhost port=5432")
 
 	if err != nil {
 		panic(err)
