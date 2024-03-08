@@ -28,6 +28,7 @@ func Connect() Pgx {
 	}
 
 	err := error(nil)
+	// troque o host para 'db' para rodar no docker ou 'localhost' para rodar local
 	conn, err = pgxpool.New(context.Background(), "user=admin password=oot123 dbname=rinha host=localhost port=5432")
 
 	if err != nil {
